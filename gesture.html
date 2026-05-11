@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gesture Control — dmdbuilds.dev</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+  <style>
+    .project-hero{position:relative;z-index:1;min-height:60vh;display:flex;flex-direction:column;justify-content:flex-end;padding:140px 48px 80px;max-width:1100px;margin:0 auto}
+    .back-link{font-family:'DM Mono',monospace;font-size:11px;font-weight:300;color:var(--muted);letter-spacing:.2em;text-transform:uppercase;text-decoration:none;display:flex;align-items:center;gap:8px;margin-bottom:48px;transition:color .2s;opacity:0;animation:fadeUp .6s ease forwards .1s}
+    .back-link:hover{color:var(--text)}
+    .project-label{font-family:'DM Mono',monospace;font-size:10px;font-weight:300;color:var(--orange);letter-spacing:.4em;text-transform:uppercase;margin-bottom:20px;opacity:0;animation:fadeUp .6s ease forwards .2s}
+    .project-hero-title{font-family:'DM Mono',monospace;font-size:clamp(36px,6vw,84px);font-weight:500;letter-spacing:-.04em;line-height:.95;margin-bottom:32px;opacity:0;animation:fadeUp .6s ease forwards .3s}
+    .project-hero-title span{color:var(--orange)}
+    .project-hero-desc{font-family:'Lora',serif;font-size:clamp(16px,2vw,20px);font-style:italic;color:var(--muted);max-width:560px;line-height:1.7;margin-bottom:40px;opacity:0;animation:fadeUp .6s ease forwards .45s}
+    .project-meta{display:flex;gap:24px;flex-wrap:wrap;opacity:0;animation:fadeUp .6s ease forwards .55s}
+    section{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:80px 48px}
+    .two-col{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:start}
+    .content-block h2{font-family:'DM Mono',monospace;font-size:clamp(22px,3vw,32px);font-weight:500;letter-spacing:-.03em;line-height:1.1;margin-bottom:24px}
+    .content-block h2 span{color:var(--orange)}
+    .content-block p{font-family:'Lora',serif;font-size:16px;color:var(--muted);line-height:1.8;margin-bottom:16px}
+    .content-block p em{color:var(--text);font-style:normal}
+    .feature-list{list-style:none;display:flex;flex-direction:column;gap:2px;margin-top:8px}
+    .feature-list li{font-family:'DM Mono',monospace;font-size:12px;font-weight:300;color:var(--muted);padding:14px 20px;background:var(--surface);border:1px solid var(--border);display:flex;align-items:center;gap:12px;letter-spacing:.02em}
+    .feature-list li::before{content:'→';color:var(--orange);flex-shrink:0}
+    .gesture-table{display:grid;gap:2px;margin-top:8px}
+    .gesture-row{display:grid;grid-template-columns:1fr 1fr 1fr;background:var(--surface);border:1px solid var(--border);overflow:hidden}
+    .gesture-row.header .g-cell{font-family:'DM Mono',monospace;font-size:10px;font-weight:500;color:var(--orange);letter-spacing:.2em;text-transform:uppercase;padding:12px 16px;background:#0d0d0d}
+    .g-cell{font-family:'DM Mono',monospace;font-size:12px;font-weight:300;color:var(--muted);padding:14px 16px;border-right:1px solid var(--border)}
+    .g-cell:last-child{border-right:none}
+    .g-cell.action{color:var(--text)}
+    .photo-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px}
+    .photo-placeholder{aspect-ratio:16/10;background:var(--surface);border:1px solid var(--border);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;cursor:pointer;transition:border-color .2s}
+    .photo-placeholder:hover{border-color:rgba(255,92,0,.3)}
+    .photo-placeholder .ph-icon{font-size:28px;opacity:.2}
+    .photo-placeholder span{font-family:'DM Mono',monospace;font-size:10px;font-weight:300;color:var(--muted);letter-spacing:.2em;text-transform:uppercase}
+    .photo-placeholder.wide{grid-column:span 2}
+    .stack-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px}
+    .stack-item{background:var(--surface);border:1px solid var(--border);padding:24px;text-align:center}
+    .stack-item .s-name{font-family:'DM Mono',monospace;font-size:13px;font-weight:500;color:var(--text);margin-bottom:6px}
+    .stack-item .s-role{font-family:'DM Mono',monospace;font-size:10px;font-weight:300;color:var(--muted);letter-spacing:.1em;text-transform:uppercase}
+    .cta-bar{display:flex;gap:16px;flex-wrap:wrap;padding:48px;background:var(--surface);border:1px solid var(--border)}
+    .nav-projects{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin-top:48px}
+    .nav-project-link{background:var(--surface);border:1px solid var(--border);padding:32px;text-decoration:none;color:inherit;transition:border-color .2s,background .2s;display:flex;justify-content:space-between;align-items:center}
+    .nav-project-link:hover{border-color:rgba(255,92,0,.2);background:#121212}
+    .nav-project-link .direction{font-family:'DM Mono',monospace;font-size:10px;font-weight:300;color:var(--muted);letter-spacing:.2em;text-transform:uppercase;margin-bottom:8px}
+    .nav-project-link .p-name{font-family:'DM Mono',monospace;font-size:18px;font-weight:500;color:var(--text)}
+    .nav-project-link .arr{font-size:20px;color:var(--muted);transition:color .2s}
+    .nav-project-link:hover .arr{color:var(--orange)}
+    @media(max-width:768px){.project-hero{padding:120px 24px 60px}.two-col{grid-template-columns:1fr;gap:48px}section{padding:60px 24px}.photo-grid{grid-template-columns:1fr}.photo-placeholder.wide{grid-column:span 1}.stack-grid{grid-template-columns:1fr 1fr}.nav-projects{grid-template-columns:1fr}.gesture-row{grid-template-columns:1fr 1fr}}
+  </style>
+</head>
+<body>
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <nav id="nav">
+    <a href="index.html" class="nav-logo"><span>dmd</span>builds.dev</a>
+    <ul class="nav-links">
+      <li class="dropdown">
+        <button class="dropdown-toggle">Projects <span class="dropdown-arrow">▾</span></button>
+        <div class="dropdown-menu">
+          <a href="jarvis.html">Jarvis <span>AI OS</span></a>
+          <a href="gesture.html">Gesture Control <span>Accessibility</span></a>
+          <a href="arduino.html">Arduino SaaS <span>Hardware</span></a>
+        </div>
+      </li>
+      <li><a href="index.html#about">About</a></li>
+      <li><a href="index.html#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <div class="project-hero">
+    <a href="index.html" class="back-link">← All projects</a>
+    <p class="project-label">Project 02 &nbsp;/&nbsp; Accessibility</p>
+    <h1 class="project-hero-title"><span>Gesture</span><br>Control</h1>
+    <p class="project-hero-desc">Hands-free Mac control through hand and face gestures. Built for accessibility — designed for people with mobility limitations who need a better way to use a computer.</p>
+    <div class="project-meta">
+      <span class="tag-orange">Active build</span>
+      <span class="tag">Python</span><span class="tag">MediaPipe</span><span class="tag">OpenCV</span><span class="tag">Accessibility</span>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <section>
+    <div class="section-label">Overview</div>
+    <div class="two-col">
+      <div class="content-block reveal">
+        <h2>What it <span>does</span></h2>
+        <p>A real-time computer vision system using <em>MediaPipe</em> and OpenCV that translates hand and face gestures into Mac system actions — desktop switching, volume, scrolling, playback, and more.</p>
+        <p>Runs as a lightweight background process on an M3 MacBook Air. The <em>M3 neural engine</em> handles MediaPipe inference efficiently with no noticeable performance hit.</p>
+        <p>Wave gesture toggles brainrot mode for hands-free TikTok/YouTube scrolling using head nods. Safety lockouts prevent accidental triggers when you're touching your face.</p>
+      </div>
+      <div class="content-block reveal reveal-delay-1">
+        <h2>Gesture <span>map</span></h2>
+        <div class="gesture-table">
+          <div class="gesture-row header"><div class="g-cell">Input</div><div class="g-cell">Gesture</div><div class="g-cell">Action</div></div>
+          <div class="gesture-row"><div class="g-cell">Right hand</div><div class="g-cell">Swipe left/right</div><div class="g-cell action">Switch desktop</div></div>
+          <div class="gesture-row"><div class="g-cell">Right hand</div><div class="g-cell">Fist</div><div class="g-cell action">Play / pause</div></div>
+          <div class="gesture-row"><div class="g-cell">Left hand</div><div class="g-cell">Pinch</div><div class="g-cell action">Volume</div></div>
+          <div class="gesture-row"><div class="g-cell">Face</div><div class="g-cell">Eyes closed 5s</div><div class="g-cell action">Sleep</div></div>
+          <div class="gesture-row"><div class="g-cell">Face</div><div class="g-cell">Mouth open 2s</div><div class="g-cell action">Caps lock</div></div>
+          <div class="gesture-row"><div class="g-cell">Face</div><div class="g-cell">Head nod (brainrot)</div><div class="g-cell action">Scroll</div></div>
+          <div class="gesture-row"><div class="g-cell">Right hand</div><div class="g-cell">Wave</div><div class="g-cell action">Toggle brainrot mode</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <section>
+    <div class="section-label">Gallery</div>
+    <div class="photo-grid reveal">
+      <div class="photo-placeholder wide"><span class="ph-icon">⬛</span><span>Demo video / GIF</span></div>
+      <div class="photo-placeholder"><span class="ph-icon">⬛</span><span>Hand tracking overlay</span></div>
+      <div class="photo-placeholder"><span class="ph-icon">⬛</span><span>Face gesture detection</span></div>
+      <div class="photo-placeholder"><span class="ph-icon">⬛</span><span>Mudra detection mode</span></div>
+      <div class="photo-placeholder"><span class="ph-icon">⬛</span><span>Code structure</span></div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <section>
+    <div class="section-label">Tech Stack</div>
+    <div class="stack-grid reveal">
+      <div class="stack-item"><div class="s-name">MediaPipe</div><div class="s-role">Hand + Face tracking</div></div>
+      <div class="stack-item"><div class="s-name">OpenCV</div><div class="s-role">Camera feed</div></div>
+      <div class="stack-item"><div class="s-name">PyAutoGUI</div><div class="s-role">System actions</div></div>
+      <div class="stack-item"><div class="s-name">Python</div><div class="s-role">Core logic</div></div>
+      <div class="stack-item"><div class="s-name">M3 Neural Engine</div><div class="s-role">Inference</div></div>
+      <div class="stack-item"><div class="s-name">DJI Action 2</div><div class="s-role">Camera input</div></div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <section>
+    <div class="section-label">Roadmap</div>
+    <div class="two-col">
+      <div class="content-block reveal">
+        <h2>Current <span>state</span></h2>
+        <p>Full gesture system working. Both hand and face detection running simultaneously. Safety features (hand lockout, face/hand distance check) implemented and tested.</p>
+        <p>Separate <em>mudra_detect.py</em> module detects 13 Bharatanatyam mudras with confidence scoring and snapshot saving.</p>
+      </div>
+      <div class="content-block reveal reveal-delay-1">
+        <h2>Next <span>steps</span></h2>
+        <ul class="feature-list">
+          <li>Ollama AI script builder (v3.0)</li>
+          <li>DMG distribution for easy install</li>
+          <li>Research paper on control systems + AI</li>
+          <li>Professor outreach for collaboration</li>
+          <li>Accessibility org partnerships</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <section>
+    <div class="cta-bar reveal">
+      <a href="https://github.com/dmdbuilds" target="_blank" class="btn-primary">View on GitHub</a>
+      <a href="index.html#contact" class="btn-ghost">Get in touch</a>
+    </div>
+    <div class="nav-projects">
+      <a href="jarvis.html" class="nav-project-link"><div><div class="direction">← Previous</div><div class="p-name">Jarvis</div></div><span class="arr">←</span></a>
+      <a href="arduino.html" class="nav-project-link"><div><div class="direction">Next →</div><div class="p-name">Arduino SaaS</div></div><span class="arr">→</span></a>
+    </div>
+  </section>
+
+  <footer><p>© 2026 <span>dmdbuilds.dev</span> — Damodar Kriplani</p><p>Pleasanton, CA · Building in public</p></footer>
+  <script src="shared.js"></script>
+</body>
+</html>

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>dmdbuilds.dev — Damodar Kriplani</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+  <style>
+    .hero { position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:0 48px;max-width:1100px;margin:0 auto; }
+    .hero-eyebrow { font-family:'DM Mono',monospace;font-size:11px;font-weight:300;color:var(--muted);letter-spacing:.35em;text-transform:uppercase;margin-bottom:32px;opacity:0;animation:fadeUp .8s ease forwards .2s; }
+    .hero-name { font-family:'DM Mono',monospace;font-size:clamp(52px,8vw,112px);font-weight:500;line-height:.95;letter-spacing:-.04em;margin-bottom:8px;opacity:0;animation:fadeUp .8s ease forwards .35s; }
+    .hero-name .orange { color:var(--orange); }
+    .hero-wordmark { font-family:'DM Mono',monospace;font-size:clamp(52px,8vw,112px);font-weight:300;line-height:.95;letter-spacing:-.04em;color:var(--muted);margin-bottom:48px;opacity:0;animation:fadeUp .8s ease forwards .5s; }
+    .hero-wordmark span { color:var(--text); }
+    .hero-tagline { font-family:'Lora',serif;font-size:clamp(16px,2vw,22px);font-weight:400;font-style:italic;color:var(--muted);max-width:480px;line-height:1.6;margin-bottom:56px;opacity:0;animation:fadeUp .8s ease forwards .65s; }
+    .hero-tagline em { color:var(--amber);font-style:normal; }
+    .hero-cta { display:flex;gap:16px;align-items:center;opacity:0;animation:fadeUp .8s ease forwards .8s; }
+    .scroll-hint { position:absolute;bottom:48px;left:48px;display:flex;align-items:center;gap:12px;opacity:0;animation:fadeUp .8s ease forwards 1.1s; }
+    .scroll-line { width:40px;height:1px;background:var(--muted);position:relative;overflow:hidden; }
+    .scroll-line::after { content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:var(--orange);animation:scanline 2s ease infinite 1.5s; }
+    .scroll-hint span { font-family:'DM Mono',monospace;font-size:10px;font-weight:300;color:var(--muted);letter-spacing:.2em;text-transform:uppercase; }
+    section { position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:120px 48px; }
+    .projects-grid { display:grid;gap:2px; }
+    .project-card { background:var(--surface);border:1px solid var(--border);padding:48px;display:grid;grid-template-columns:1fr auto;gap:24px;align-items:start;text-decoration:none;color:inherit;transition:border-color .3s,background .3s;position:relative;overflow:hidden; }
+    .project-card::before { content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--orange);transform:scaleY(0);transform-origin:bottom;transition:transform .3s ease; }
+    .project-card:hover { border-color:rgba(255,92,0,.2);background:#121212; }
+    .project-card:hover::before { transform:scaleY(1); }
+    .project-num { font-family:'DM Mono',monospace;font-size:11px;font-weight:300;color:var(--orange);letter-spacing:.2em;margin-bottom:16px; }
+    .project-name { font-family:'DM Mono',monospace;font-size:clamp(20px,3vw,28px);font-weight:500;color:var(--text);letter-spacing:-.02em;margin-bottom:12px;line-height:1.2; }
+    .project-desc { font-family:'Lora',serif;font-size:15px;color:var(--muted);line-height:1.7;max-width:560px; }
+    .project-tags { display:flex;gap:8px;flex-wrap:wrap;margin-top:24px; }
+    .project-arrow { font-size:20px;color:var(--muted);transition:color .2s,transform .2s;margin-top:4px; }
+    .project-card:hover .project-arrow { color:var(--orange);transform:translate(4px,-4px); }
+    .about-grid { display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start; }
+    .about-text h2 { font-family:'DM Mono',monospace;font-size:clamp(28px,4vw,44px);font-weight:500;letter-spacing:-.03em;line-height:1.1;margin-bottom:32px; }
+    .about-text h2 span { color:var(--orange); }
+    .about-text p { font-family:'Lora',serif;font-size:16px;color:var(--muted);line-height:1.8;margin-bottom:20px; }
+    .about-text p em { color:var(--text);font-style:normal; }
+    .about-stats { display:grid;grid-template-columns:1fr 1fr;gap:2px; }
+    .stat-box { background:var(--surface);border:1px solid var(--border);padding:32px 28px; }
+    .stat-num { font-family:'DM Mono',monospace;font-size:36px;font-weight:500;color:var(--orange);letter-spacing:-.03em;line-height:1;margin-bottom:8px; }
+    .stat-label { font-family:'DM Mono',monospace;font-size:11px;font-weight:300;color:var(--muted);letter-spacing:.1em;text-transform:uppercase; }
+    .contact-inner { display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center; }
+    .contact-text h2 { font-family:'DM Mono',monospace;font-size:clamp(28px,4vw,44px);font-weight:500;letter-spacing:-.03em;line-height:1.1;margin-bottom:24px; }
+    .contact-text h2 span { color:var(--orange); }
+    .contact-text p { font-family:'Lora',serif;font-size:16px;color:var(--muted);line-height:1.8; }
+    .contact-links { display:flex;flex-direction:column;gap:2px; }
+    .contact-link { display:flex;align-items:center;justify-content:space-between;padding:20px 28px;background:var(--surface);border:1px solid var(--border);text-decoration:none;color:var(--text);font-family:'DM Mono',monospace;font-size:13px;font-weight:400;letter-spacing:-.01em;transition:border-color .2s,background .2s; }
+    .contact-link:hover { border-color:rgba(255,92,0,.3);background:#121212; }
+    .contact-link span { font-size:10px;font-weight:300;color:var(--muted);letter-spacing:.2em;text-transform:uppercase; }
+    @media(max-width:768px){.hero{padding:0 24px}section{padding:80px 24px}.about-grid,.contact-inner{grid-template-columns:1fr;gap:48px}.project-card{padding:32px 24px}.scroll-hint{left:24px}}
+  </style>
+</head>
+<body>
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <nav id="nav">
+    <a href="index.html" class="nav-logo"><span>dmd</span>builds.dev</a>
+    <ul class="nav-links">
+      <li class="dropdown">
+        <button class="dropdown-toggle">Projects <span class="dropdown-arrow">▾</span></button>
+        <div class="dropdown-menu">
+          <a href="jarvis.html">Jarvis <span>AI OS</span></a>
+          <a href="gesture.html">Gesture Control <span>Accessibility</span></a>
+          <a href="arduino.html">Arduino SaaS <span>Hardware</span></a>
+        </div>
+      </li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+  <div class="hero">
+    <p class="hero-eyebrow">Pleasanton, CA &nbsp;/&nbsp; Building in public</p>
+    <h1 class="hero-name"><span class="orange">dmd</span>builds</h1>
+    <p class="hero-wordmark"><span>Damodar</span> Kriplani</p>
+    <p class="hero-tagline">Building <em>AI systems</em> and automation tools that do real work in the real world. Not demos. Products.</p>
+    <div class="hero-cta">
+      <a href="#projects" class="btn-primary">See the work</a>
+      <a href="#contact" class="btn-ghost">Get in touch</a>
+    </div>
+    <div class="scroll-hint"><div class="scroll-line"></div><span>Scroll</span></div>
+  </div>
+  <div class="divider"></div>
+  <section id="projects">
+    <div class="section-label">Projects</div>
+    <div class="projects-grid">
+      <a href="jarvis.html" class="project-card reveal">
+        <div>
+          <p class="project-num">01</p>
+          <h3 class="project-name">Jarvis</h3>
+          <p class="project-desc">Personal AI operating system on GCP, Cloud Run, and PostgreSQL. Automates assignment detection via OCR, generates drafts, and schedules tasks based on energy levels throughout the day.</p>
+          <div class="project-tags"><span class="tag">Python</span><span class="tag">GCP</span><span class="tag">FastAPI</span><span class="tag">PostgreSQL</span></div>
+          <div class="project-status"><span class="status-dot"></span> Active build</div>
+        </div>
+        <span class="project-arrow">↗</span>
+      </a>
+      <a href="gesture.html" class="project-card reveal reveal-delay-1">
+        <div>
+          <p class="project-num">02</p>
+          <h3 class="project-name">Gesture Control</h3>
+          <p class="project-desc">Hands-free Mac control using MediaPipe and OpenCV. Hand gestures for desktop switching, volume, and playback. Face gestures for sleep, caps lock, and scrolling. Built with accessibility in mind.</p>
+          <div class="project-tags"><span class="tag">Python</span><span class="tag">MediaPipe</span><span class="tag">OpenCV</span><span class="tag">Accessibility</span></div>
+          <div class="project-status"><span class="status-dot"></span> Active build</div>
+        </div>
+        <span class="project-arrow">↗</span>
+      </a>
+      <a href="arduino.html" class="project-card reveal reveal-delay-2">
+        <div>
+          <p class="project-num">03</p>
+          <h3 class="project-name">Arduino SaaS</h3>
+          <p class="project-desc">Generates Arduino project code and sources parts based on what you want to build. Making hardware prototyping accessible to anyone, regardless of technical background.</p>
+          <div class="project-tags"><span class="tag">Arduino</span><span class="tag">Python</span><span class="tag">SaaS</span></div>
+          <div class="project-status"><span class="status-dot"></span> In progress</div>
+        </div>
+        <span class="project-arrow">↗</span>
+      </a>
+    </div>
+  </section>
+  <div class="divider"></div>
+  <section id="about">
+    <div class="section-label">About</div>
+    <div class="about-grid">
+      <div class="about-text reveal">
+        <h2>Builder.<br><span>Founder mindset.</span></h2>
+        <p>I'm a 9th grader from Pleasanton, CA who builds systems that <em>actually do things</em>. I compete on FRC Team 7419, led the impact video for two regionals, and I'm shipping real products this summer.</p>
+        <p>I don't wait for permission. If something needs to exist, I build it. If it breaks, I fix it. The goal is always the same: <em>real world, not demo day.</em></p>
+      </div>
+      <div class="about-stats reveal reveal-delay-1">
+        <div class="stat-box"><div class="stat-num">3+</div><div class="stat-label">Active Projects</div></div>
+        <div class="stat-box"><div class="stat-num">FRC</div><div class="stat-label">Team 7419</div></div>
+        <div class="stat-box"><div class="stat-num">9th</div><div class="stat-label">Grade</div></div>
+        <div class="stat-box"><div class="stat-num">CA</div><div class="stat-label">Pleasanton</div></div>
+      </div>
+    </div>
+  </section>
+  <div class="divider"></div>
+  <section id="contact">
+    <div class="section-label">Contact</div>
+    <div class="contact-inner">
+      <div class="contact-text reveal">
+        <h2>Let's<br><span>build something.</span></h2>
+        <p>Open to collabs, web design clients, research connections, and anyone building interesting things.</p>
+      </div>
+      <div class="contact-links reveal reveal-delay-1">
+        <a href="mailto:hi@dmdbuilds.dev" class="contact-link">hi@dmdbuilds.dev <span>Email</span></a>
+        <a href="https://linkedin.com/in/damodarkriplani" target="_blank" class="contact-link">damodarkriplani <span>LinkedIn</span></a>
+        <a href="https://github.com/dmdbuilds" target="_blank" class="contact-link">@dmdbuilds <span>GitHub</span></a>
+        <a href="https://tiktok.com/@buildwithdmd" target="_blank" class="contact-link">@buildwithdmd <span>TikTok</span></a>
+      </div>
+    </div>
+  </section>
+  <footer><p>© 2026 <span>dmdbuilds.dev</span> — Damodar Kriplani</p><p>Pleasanton, CA · Building in public</p></footer>
+  <script src="shared.js"></script>
+</body>
+</html>

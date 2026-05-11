@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Arduino SaaS — dmdbuilds.dev</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+  <style>
+    .project-hero{position:relative;z-index:1;min-height:60vh;display:flex;flex-direction:column;justify-content:flex-end;padding:140px 48px 80px;max-width:1100px;margin:0 auto}
+    .back-link{font-family:'DM Mono',monospace;font-size:11px;font-weight:300;color:var(--muted);letter-spacing:.2em;text-transform:uppercase;text-decoration:none;display:flex;align-items:center;gap:8px;margin-bottom:48px;transition:color .2s;opacity:0;animation:fadeUp .6s ease forwards .1s}
+    .back-link:hover{color:var(--text)}
+    .project-label{font-family:'DM Mono',monospace;font-size:10px;font-weight:300;color:var(--orange);letter-spacing:.4em;text-transform:uppercase;margin-bottom:20px;opacity:0;animation:fadeUp .6s ease forwards .2s}
+    .project-hero-title{font-family:'DM Mono',monospace;font-size:clamp(36px,6vw,84px);font-weight:500;letter-spacing:-.04em;line-height:.95;margin-bottom:32px;opacity:0;animation:fadeUp .6s ease forwards .3s}
+    .project-hero-title span{color:var(--orange)}
+    .project-hero-desc{font-family:'Lora',serif;font-size:clamp(16px,2vw,20px);font-style:italic;color:var(--muted);max-width:560px;line-height:1.7;margin-bottom:40px;opacity:0;animation:fadeUp .6s ease forwards .45s}
+    .project-meta{display:flex;gap:24px;flex-wrap:wrap;opacity:0;animation:fadeUp .6s ease forwards .55s}
+    section{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:80px 48px}
+    .two-col{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:start}
+    .content-block h2{font-family:'DM Mono',monospace;font-size:clamp(22px,3vw,32px);font-weight:500;letter-spacing:-.03em;line-height:1.1;margin-bottom:24px}
+    .content-block h2 span{color:var(--orange)}
+    .content-block p{font-family:'Lora',serif;font-size:16px;color:var(--muted);line-height:1.8;margin-bottom:16px}
+    .content-block p em{color:var(--text);font-style:normal}
+    .feature-list{list-style:none;display:flex;flex-direction:column;gap:2px;margin-top:8px}
+    .feature-list li{font-family:'DM Mono',monospace;font-size:12px;font-weight:300;color:var(--muted);padding:14px 20px;background:var(--surface);border:1px solid var(--border);display:flex;align-items:center;gap:12px;letter-spacing:.02em}
+    .feature-list li::before{content:'→';color:var(--orange);flex-shrink:0}
+    .tier-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px}
+    .tier-card{background:var(--surface);border:1px solid var(--border);padding:32px}
+    .tier-card.featured{border-color:rgba(255,92,0,.3)}
+    .tier-name{font-family:'DM Mono',monospace;font-size:11px;font-weight:300;color:var(--muted);letter-spacing:.3em;text-transform:uppercase;margin-bottom:12px}
+    .tier-price{font-family:'DM Mono',monospace;font-size:36px;font-weight:500;color:var(--orange);letter-spacing:-.03em;line-height:1;margin-bottom:4px}
+    .tier-price span{font-size:14px;color:var(--muted);font-weight:300}
+    .tier-desc{font-family:'Lora',serif;font-size:14px;color:var(--muted);margin:16px 0;line-height:1.6}
+    .photo-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px}
+    .photo-placeholder{aspect-ratio:16/10;background:var(--surface);border:1px solid var(--border);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;transition:border-color .2s}
+    .photo-placeholder:hover{border-color:rgba(255,92,0,.3)}
+    .photo-placeholder .ph-icon{font-size:28px;opacity:.2}
+    .photo-placeholder span{font-family:'DM Mono',monospace;font-size:10px;font-weight:300;color:var(--muted);letter-spacing:.2em;text-transform:uppercase}
+    .photo-placeholder.wide{grid-column:span 2}
+    .stack-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px}
+    .stack-item{background:var(--surface);border:1px solid var(--border);padding:24px;text-align:center}
+    .stack-item .s-name{font-family:'DM Mono',monospace;font-size:13px;font-weight:500;color:var(--text);margin-bottom:6px}
+    .stack-item .s-role{font-family:'DM Mono',monospace;font-size:10px;font-weight:300;color:var(--muted);letter-spacing:.1em;text-transform:uppercase}
+    .cta-bar{display:flex;gap:16px;flex-wrap:wrap;padding:48px;background:var(--surface);border:1px solid var(--border)}
+    .nav-projects{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin-top:48px}
+    .nav-project-link{background:var(--surface);border:1px solid var(--border);padding:32px;text-decoration:none;color:inherit;transition:border-color .2s,background .2s;display:flex;justify-content:space-between;align-items:center}
+    .nav-project-link:hover{border-color:rgba(255,92,0,.2);background:#121212}
+    .nav-project-link .direction{font-family:'DM Mono',monospace;font-size:10px;font-weight:300;color:var(--muted);letter-spacing:.2em;text-transform:uppercase;margin-bottom:8px}
+    .nav-project-link .p-name{font-family:'DM Mono',monospace;font-size:18px;font-weight:500;color:var(--text)}
+    .nav-project-link .arr{font-size:20px;color:var(--muted);transition:color .2s}
+    .nav-project-link:hover .arr{color:var(--orange)}
+    @media(max-width:768px){.project-hero{padding:120px 24px 60px}.two-col,.tier-grid{grid-template-columns:1fr;gap:48px}section{padding:60px 24px}.photo-grid{grid-template-columns:1fr}.photo-placeholder.wide{grid-column:span 1}.stack-grid{grid-template-columns:1fr 1fr}.nav-projects{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <nav id="nav">
+    <a href="index.html" class="nav-logo"><span>dmd</span>builds.dev</a>
+    <ul class="nav-links">
+      <li class="dropdown">
+        <button class="dropdown-toggle">Projects <span class="dropdown-arrow">▾</span></button>
+        <div class="dropdown-menu">
+          <a href="jarvis.html">Jarvis <span>AI OS</span></a>
+          <a href="gesture.html">Gesture Control <span>Accessibility</span></a>
+          <a href="arduino.html">Arduino SaaS <span>Hardware</span></a>
+        </div>
+      </li>
+      <li><a href="index.html#about">About</a></li>
+      <li><a href="index.html#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <div class="project-hero">
+    <a href="index.html" class="back-link">← All projects</a>
+    <p class="project-label">Project 03 &nbsp;/&nbsp; Hardware</p>
+    <h1 class="project-hero-title"><span>Arduino</span><br>SaaS</h1>
+    <p class="project-hero-desc">Tell it what you want to build. It generates the code, sources the parts, and gives you exactly what you need. Hardware prototyping for anyone.</p>
+    <div class="project-meta">
+      <span class="tag-orange">In progress</span>
+      <span class="tag">Arduino</span><span class="tag">Python</span><span class="tag">SaaS</span>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <section>
+    <div class="section-label">Overview</div>
+    <div class="two-col">
+      <div class="content-block reveal">
+        <h2>What it <span>does</span></h2>
+        <p>Most people who want to build Arduino projects get blocked by two things: <em>writing the code</em> and <em>figuring out what parts to buy</em>. This solves both.</p>
+        <p>You describe your project in plain language. The platform generates working Arduino code, builds a parts list with exact components, and links you to where to buy them from Amazon or Digikey.</p>
+        <p>The demo project is <em>Clear Safe</em> — an Arduino-powered safe with a 4x4 keypad, servo motor, timer lock, and PIN override. Built it in Innovation Nexus club at Quarry Lane.</p>
+      </div>
+      <div class="content-block reveal reveal-delay-1">
+        <h2>Core <span>features</span></h2>
+        <ul class="feature-list">
+          <li>Natural language project description input</li>
+          <li>Working Arduino code generation</li>
+          <li>Automatic parts list with quantities</li>
+          <li>Amazon and Digikey sourcing links</li>
+          <li>Clear Safe as viral demo project</li>
+          <li>Free tier: 3 generations per month</li>
+          <li>Paid tier: unlimited at $8/mo</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <section>
+    <div class="section-label">Pricing</div>
+    <div class="tier-grid reveal">
+      <div class="tier-card">
+        <div class="tier-name">Free</div>
+        <div class="tier-price">$0 <span>/ month</span></div>
+        <div class="tier-desc">3 project generations per month. Full code and parts list every time. No credit card required.</div>
+        <ul class="feature-list">
+          <li>3 generations / month</li>
+          <li>Full Arduino code</li>
+          <li>Parts list + sourcing links</li>
+        </ul>
+      </div>
+      <div class="tier-card featured">
+        <div class="tier-name">Pro</div>
+        <div class="tier-price">$8 <span>/ month</span></div>
+        <div class="tier-desc">Unlimited generations. Priority processing. Advanced project complexity. Build anything.</div>
+        <ul class="feature-list">
+          <li>Unlimited generations</li>
+          <li>Full Arduino code</li>
+          <li>Parts list + sourcing links</li>
+          <li>Advanced project complexity</li>
+          <li>Priority processing</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <section>
+    <div class="section-label">Gallery</div>
+    <div class="photo-grid reveal">
+      <div class="photo-placeholder wide"><span class="ph-icon">⬛</span><span>Clear Safe demo build</span></div>
+      <div class="photo-placeholder"><span class="ph-icon">⬛</span><span>Platform UI</span></div>
+      <div class="photo-placeholder"><span class="ph-icon">⬛</span><span>Generated code output</span></div>
+      <div class="photo-placeholder"><span class="ph-icon">⬛</span><span>Parts list example</span></div>
+      <div class="photo-placeholder"><span class="ph-icon">⬛</span><span>Circuit diagram</span></div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <section>
+    <div class="section-label">Status</div>
+    <div class="two-col">
+      <div class="content-block reveal">
+        <h2>Where it's <span>at</span></h2>
+        <p>Concept and pricing model defined. Clear Safe built as the demo project — <em>working hardware proof</em> of what the platform generates.</p>
+        <p>Full platform build is queued for this summer alongside Jarvis MVP and the web design business.</p>
+      </div>
+      <div class="content-block reveal reveal-delay-1">
+        <h2>Build <span>queue</span></h2>
+        <ul class="feature-list">
+          <li>Clear Safe demo — complete</li>
+          <li>Pricing model — defined</li>
+          <li>Code generation engine — not started</li>
+          <li>Parts sourcing API — not started</li>
+          <li>Frontend platform — not started</li>
+          <li>Stripe integration — not started</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <section>
+    <div class="cta-bar reveal">
+      <a href="https://github.com/dmdbuilds" target="_blank" class="btn-primary">View on GitHub</a>
+      <a href="index.html#contact" class="btn-ghost">Get in touch</a>
+    </div>
+    <div class="nav-projects">
+      <a href="gesture.html" class="nav-project-link"><div><div class="direction">← Previous</div><div class="p-name">Gesture Control</div></div><span class="arr">←</span></a>
+      <a href="index.html" class="nav-project-link"><div><div class="direction">Back to</div><div class="p-name">All Projects</div></div><span class="arr">→</span></a>
+    </div>
+  </section>
+
+  <footer><p>© 2026 <span>dmdbuilds.dev</span> — Damodar Kriplani</p><p>Pleasanton, CA · Building in public</p></footer>
+  <script src="shared.js"></script>
+</body>
+</html>

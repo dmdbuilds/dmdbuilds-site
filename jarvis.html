@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jarvis — dmdbuilds.dev</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+  <style>
+    .project-hero{position:relative;z-index:1;min-height:60vh;display:flex;flex-direction:column;justify-content:flex-end;padding:140px 48px 80px;max-width:1100px;margin:0 auto}
+    .back-link{font-family:'DM Mono',monospace;font-size:11px;font-weight:300;color:var(--muted);letter-spacing:.2em;text-transform:uppercase;text-decoration:none;display:flex;align-items:center;gap:8px;margin-bottom:48px;transition:color .2s;opacity:0;animation:fadeUp .6s ease forwards .1s}
+    .back-link:hover{color:var(--text)}
+    .project-label{font-family:'DM Mono',monospace;font-size:10px;font-weight:300;color:var(--orange);letter-spacing:.4em;text-transform:uppercase;margin-bottom:20px;opacity:0;animation:fadeUp .6s ease forwards .2s}
+    .project-hero-title{font-family:'DM Mono',monospace;font-size:clamp(48px,8vw,100px);font-weight:500;letter-spacing:-.04em;line-height:.95;margin-bottom:32px;opacity:0;animation:fadeUp .6s ease forwards .3s}
+    .project-hero-title span{color:var(--orange)}
+    .project-hero-desc{font-family:'Lora',serif;font-size:clamp(16px,2vw,20px);font-style:italic;color:var(--muted);max-width:560px;line-height:1.7;margin-bottom:40px;opacity:0;animation:fadeUp .6s ease forwards .45s}
+    .project-meta{display:flex;gap:24px;flex-wrap:wrap;opacity:0;animation:fadeUp .6s ease forwards .55s}
+    section{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:80px 48px}
+    .two-col{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:start}
+    .content-block h2{font-family:'DM Mono',monospace;font-size:clamp(22px,3vw,32px);font-weight:500;letter-spacing:-.03em;line-height:1.1;margin-bottom:24px}
+    .content-block h2 span{color:var(--orange)}
+    .content-block p{font-family:'Lora',serif;font-size:16px;color:var(--muted);line-height:1.8;margin-bottom:16px}
+    .content-block p em{color:var(--text);font-style:normal}
+    .feature-list{list-style:none;display:flex;flex-direction:column;gap:2px;margin-top:8px}
+    .feature-list li{font-family:'DM Mono',monospace;font-size:12px;font-weight:300;color:var(--muted);padding:14px 20px;background:var(--surface);border:1px solid var(--border);display:flex;align-items:center;gap:12px;letter-spacing:.02em}
+    .feature-list li::before{content:'→';color:var(--orange);flex-shrink:0}
+    .photo-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px}
+    .photo-grid.three{grid-template-columns:1fr 1fr 1fr}
+    .photo-placeholder{aspect-ratio:16/10;background:var(--surface);border:1px solid var(--border);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;cursor:pointer;transition:border-color .2s}
+    .photo-placeholder:hover{border-color:rgba(255,92,0,.3)}
+    .photo-placeholder .ph-icon{font-size:28px;opacity:.2}
+    .photo-placeholder span{font-family:'DM Mono',monospace;font-size:10px;font-weight:300;color:var(--muted);letter-spacing:.2em;text-transform:uppercase}
+    .photo-placeholder.wide{grid-column:span 2}
+    .stack-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px}
+    .stack-item{background:var(--surface);border:1px solid var(--border);padding:24px;text-align:center}
+    .stack-item .s-name{font-family:'DM Mono',monospace;font-size:13px;font-weight:500;color:var(--text);margin-bottom:6px}
+    .stack-item .s-role{font-family:'DM Mono',monospace;font-size:10px;font-weight:300;color:var(--muted);letter-spacing:.1em;text-transform:uppercase}
+    .cta-bar{display:flex;gap:16px;flex-wrap:wrap;padding:48px;background:var(--surface);border:1px solid var(--border)}
+    .nav-projects{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin-top:48px}
+    .nav-project-link{background:var(--surface);border:1px solid var(--border);padding:32px;text-decoration:none;color:inherit;transition:border-color .2s,background .2s;display:flex;justify-content:space-between;align-items:center}
+    .nav-project-link:hover{border-color:rgba(255,92,0,.2);background:#121212}
+    .nav-project-link .direction{font-family:'DM Mono',monospace;font-size:10px;font-weight:300;color:var(--muted);letter-spacing:.2em;text-transform:uppercase;margin-bottom:8px}
+    .nav-project-link .p-name{font-family:'DM Mono',monospace;font-size:18px;font-weight:500;color:var(--text)}
+    .nav-project-link .arr{font-size:20px;color:var(--muted);transition:color .2s,transform .2s}
+    .nav-project-link:hover .arr{color:var(--orange)}
+    @media(max-width:768px){.project-hero{padding:120px 24px 60px}.two-col{grid-template-columns:1fr;gap:48px}section{padding:60px 24px}.photo-grid{grid-template-columns:1fr}.photo-placeholder.wide{grid-column:span 1}.stack-grid{grid-template-columns:1fr 1fr}.nav-projects{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <nav id="nav">
+    <a href="index.html" class="nav-logo"><span>dmd</span>builds.dev</a>
+    <ul class="nav-links">
+      <li class="dropdown">
+        <button class="dropdown-toggle">Projects <span class="dropdown-arrow">▾</span></button>
+        <div class="dropdown-menu">
+          <a href="jarvis.html">Jarvis <span>AI OS</span></a>
+          <a href="gesture.html">Gesture Control <span>Accessibility</span></a>
+          <a href="arduino.html">Arduino SaaS <span>Hardware</span></a>
+        </div>
+      </li>
+      <li><a href="index.html#about">About</a></li>
+      <li><a href="index.html#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <div class="project-hero">
+    <a href="index.html" class="back-link">← All projects</a>
+    <p class="project-label">Project 01 &nbsp;/&nbsp; AI Systems</p>
+    <h1 class="project-hero-title"><span>J</span>arvis</h1>
+    <p class="project-hero-desc">A personal AI operating system that runs on real infrastructure and does real work — not a demo, not a prototype, a system I actually use.</p>
+    <div class="project-meta">
+      <span class="tag-orange">Active build</span>
+      <span class="tag">GCP</span><span class="tag">Python</span><span class="tag">FastAPI</span><span class="tag">PostgreSQL</span>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <section>
+    <div class="section-label">Overview</div>
+    <div class="two-col">
+      <div class="content-block reveal">
+        <h2>What it <span>does</span></h2>
+        <p>Jarvis is my personal AI assistant running on hybrid cloud and local infrastructure. The goal: <em>zero manual effort</em> for detecting, scheduling, and completing tasks.</p>
+        <p>It scrapes Google Classroom automatically, detects new assignments via OCR from my iPhone, generates draft responses using an LLM, and schedules work based on my energy levels throughout the day.</p>
+        <p>Everything runs on <em>GCP Cloud Run</em> with a PostgreSQL database on Cloud SQL, triggered by Cloud Scheduler every minute.</p>
+      </div>
+      <div class="content-block reveal reveal-delay-1">
+        <h2>Core <span>features</span></h2>
+        <ul class="feature-list">
+          <li>Google Classroom scraper via Playwright</li>
+          <li>iPhone Shortcut OCR trigger for new assignments</li>
+          <li>LLM draft generation stored in Postgres</li>
+          <li>Energy-aware task scheduling (peaks 4:30–7pm)</li>
+          <li>Google Calendar automation with undo</li>
+          <li>Daily brief generation at 6am</li>
+          <li>Cloud Scheduler every-minute execution loop</li>
+          <li>FastAPI backend on Cloud Run</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <section>
+    <div class="section-label">Gallery</div>
+    <div class="photo-grid reveal">
+      <div class="photo-placeholder wide">
+        <span class="ph-icon">⬛</span>
+        <span>Architecture diagram</span>
+      </div>
+      <div class="photo-placeholder">
+        <span class="ph-icon">⬛</span>
+        <span>Dashboard screenshot</span>
+      </div>
+      <div class="photo-placeholder">
+        <span class="ph-icon">⬛</span>
+        <span>iPhone shortcut</span>
+      </div>
+      <div class="photo-placeholder">
+        <span class="ph-icon">⬛</span>
+        <span>GCP console</span>
+      </div>
+      <div class="photo-placeholder">
+        <span class="ph-icon">⬛</span>
+        <span>Database schema</span>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <section>
+    <div class="section-label">Tech Stack</div>
+    <div class="stack-grid reveal">
+      <div class="stack-item"><div class="s-name">FastAPI</div><div class="s-role">Backend</div></div>
+      <div class="stack-item"><div class="s-name">Cloud Run</div><div class="s-role">Deployment</div></div>
+      <div class="stack-item"><div class="s-name">PostgreSQL</div><div class="s-role">Database</div></div>
+      <div class="stack-item"><div class="s-name">Cloud Scheduler</div><div class="s-role">Triggers</div></div>
+      <div class="stack-item"><div class="s-name">Playwright</div><div class="s-role">Scraper</div></div>
+      <div class="stack-item"><div class="s-name">Secret Manager</div><div class="s-role">Credentials</div></div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <section>
+    <div class="section-label">Documentation</div>
+    <div class="two-col">
+      <div class="content-block reveal">
+        <h2>Current <span>status</span></h2>
+        <p>FastAPI backend deployed on Cloud Run. Cloud Scheduler fires every minute hitting <em>/run-checks/execute</em>. Cloud SQL Postgres connected with Secret Manager credentials.</p>
+        <p>Working on: <em>jarvis-sweep</em> Cloud Run Job to connect the scheduler to real execution — Playwright scraper, LLM draft generation, and frontend endpoints.</p>
+        <p>Estimated MVP gap: <em>10–18 hours</em> of focused build time.</p>
+      </div>
+      <div class="content-block reveal reveal-delay-1">
+        <h2>Build <span>log</span></h2>
+        <ul class="feature-list">
+          <li>Cloud Run + Cloud SQL deployed and connected</li>
+          <li>run_checks table and scheduler working</li>
+          <li>Personal Gmail OAuth working locally</li>
+          <li>jarvis-sweep Cloud Run Job — in progress</li>
+          <li>Playwright Classroom scraper — in progress</li>
+          <li>LLM draft endpoint — not started</li>
+          <li>iPhone Shortcut OCR — not started</li>
+          <li>Frontend dashboard — not started</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <section>
+    <div class="cta-bar reveal">
+      <a href="https://github.com/dmdbuilds" target="_blank" class="btn-primary">View on GitHub</a>
+      <a href="index.html#contact" class="btn-ghost">Get in touch</a>
+    </div>
+    <div class="nav-projects">
+      <a href="index.html" class="nav-project-link"><div><div class="direction">← Back</div><div class="p-name">All Projects</div></div><span class="arr">←</span></a>
+      <a href="gesture.html" class="nav-project-link"><div><div class="direction">Next →</div><div class="p-name">Gesture Control</div></div><span class="arr">→</span></a>
+    </div>
+  </section>
+
+  <footer><p>© 2026 <span>dmdbuilds.dev</span> — Damodar Kriplani</p><p>Pleasanton, CA · Building in public</p></footer>
+  <script src="shared.js"></script>
+</body>
+</html>
