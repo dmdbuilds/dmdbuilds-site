@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About — dmdbuilds.dev</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <style>
+    .hero { position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:0 48px;max-width:1100px;margin:0 auto; }
+    .hero-eyebrow { font-family:'DM Mono',monospace;font-size:11px;font-weight:300;color:var(--muted);letter-spacing:.35em;text-transform:uppercase;margin-bottom:32px;opacity:0;animation:fadeUp .8s ease forwards .2s; }
+    .hero-name { font-family:'DM Mono',monospace;font-size:clamp(52px,8vw,112px);font-weight:500;line-height:.95;letter-spacing:-.04em;margin-bottom:8px;opacity:0;animation:fadeUp .8s ease forwards .35s; }
+    .hero-name .orange { color:var(--orange); }
+    .hero-wordmark { font-family:'DM Mono',monospace;font-size:clamp(52px,8vw,112px);font-weight:300;line-height:.95;letter-spacing:-.04em;color:var(--muted);margin-bottom:48px;opacity:0;animation:fadeUp .8s ease forwards .5s; }
+    .hero-wordmark span { color:var(--text); }
+    .hero-tagline { font-family:'Lora',serif;font-size:clamp(16px,2vw,22px);font-weight:400;font-style:italic;color:var(--muted);max-width:480px;line-height:1.6;margin-bottom:56px;opacity:0;animation:fadeUp .8s ease forwards .65s; }
+    .hero-tagline em { color:var(--amber);font-style:normal; }
+    .hero-cta { display:flex;gap:16px;align-items:center;opacity:0;animation:fadeUp .8s ease forwards .8s; }
+    .scroll-hint { position:absolute;bottom:48px;left:48px;display:flex;align-items:center;gap:12px;opacity:0;animation:fadeUp .8s ease forwards 1.1s; }
+    .scroll-line { width:40px;height:1px;background:var(--muted);position:relative;overflow:hidden; }
+    .scroll-line::after { content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:var(--orange);animation:scanline 2s ease infinite 1.5s; }
+    .scroll-hint span { font-family:'DM Mono',monospace;font-size:10px;font-weight:300;color:var(--muted);letter-spacing:.2em;text-transform:uppercase; }
+    section { position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:120px 48px; }
+    .projects-grid { display:grid;gap:2px; }
+    .project-card { background:var(--surface);border:1px solid var(--border);padding:48px;display:grid;grid-template-columns:1fr auto;gap:24px;align-items:start;text-decoration:none;color:inherit;transition:border-color .3s,background .3s;position:relative;overflow:hidden; }
+    .project-card::before { content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--orange);transform:scaleY(0);transform-origin:bottom;transition:transform .3s ease; }
+    .project-card:hover { border-color:rgba(255,92,0,.2);background:#121212; }
+    .project-card:hover::before { transform:scaleY(1); }
+    .project-num { font-family:'DM Mono',monospace;font-size:11px;font-weight:300;color:var(--orange);letter-spacing:.2em;margin-bottom:16px; }
+    .project-name { font-family:'DM Mono',monospace;font-size:clamp(20px,3vw,28px);font-weight:500;color:var(--text);letter-spacing:-.02em;margin-bottom:12px;line-height:1.2; }
+    .project-desc { font-family:'Lora',serif;font-size:15px;color:var(--muted);line-height:1.7;max-width:560px; }
+    .project-tags { display:flex;gap:8px;flex-wrap:wrap;margin-top:24px; }
+    .project-arrow { font-size:20px;color:var(--muted);transition:color .2s,transform .2s;margin-top:4px; }
+    .project-card:hover .project-arrow { color:var(--orange);transform:translate(4px,-4px); }
+    .about-grid { display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start; }
+    .about-text h2 { font-family:'DM Mono',monospace;font-size:clamp(28px,4vw,44px);font-weight:500;letter-spacing:-.03em;line-height:1.1;margin-bottom:32px; }
+    .about-text h2 span { color:var(--orange); }
+    .about-text p { font-family:'Lora',serif;font-size:16px;color:var(--muted);line-height:1.8;margin-bottom:20px; }
+    .about-text p em { color:var(--text);font-style:normal; }
+    .about-stats { display:grid;grid-template-columns:1fr 1fr;gap:2px; }
+    .stat-box { background:var(--surface);border:1px solid var(--border);padding:32px 28px; }
+    .stat-num { font-family:'DM Mono',monospace;font-size:36px;font-weight:500;color:var(--orange);letter-spacing:-.03em;line-height:1;margin-bottom:8px; }
+    .stat-label { font-family:'DM Mono',monospace;font-size:11px;font-weight:300;color:var(--muted);letter-spacing:.1em;text-transform:uppercase; }
+    .contact-inner { display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center; }
+    .contact-text h2 { font-family:'DM Mono',monospace;font-size:clamp(28px,4vw,44px);font-weight:500;letter-spacing:-.03em;line-height:1.1;margin-bottom:24px; }
+    .contact-text h2 span { color:var(--orange); }
+    .contact-text p { font-family:'Lora',serif;font-size:16px;color:var(--muted);line-height:1.8; }
+    .contact-links { display:flex;flex-direction:column;gap:2px; }
+    .contact-link { display:flex;align-items:center;justify-content:space-between;padding:20px 28px;background:var(--surface);border:1px solid var(--border);text-decoration:none;color:var(--text);font-family:'DM Mono',monospace;font-size:13px;font-weight:400;letter-spacing:-.01em;transition:border-color .2s,background .2s; }
+    .contact-link:hover { border-color:rgba(255,92,0,.3);background:#121212; }
+    .contact-link span { font-size:10px;font-weight:300;color:var(--muted);letter-spacing:.2em;text-transform:uppercase; }
+    @media(max-width:768px){.hero{padding:0 24px}section{padding:80px 24px}.about-grid,.contact-inner{grid-template-columns:1fr;gap:48px}.project-card{padding:32px 24px}.scroll-hint{left:24px}}
+  </style>
+  <style>
+.page-hero{position:relative;z-index:1;min-height:50vh;display:flex;flex-direction:column;justify-content:flex-end;padding:140px 48px 80px;max-width:1100px;margin:0 auto}
+.page-label{font-family:'DM Mono',monospace;font-size:10px;font-weight:300;color:var(--orange);letter-spacing:.4em;text-transform:uppercase;margin-bottom:20px;opacity:0;animation:fadeUp .6s ease forwards .2s}
+.page-title{font-family:'DM Mono',monospace;font-size:clamp(48px,8vw,100px);font-weight:500;letter-spacing:-.04em;line-height:.95;margin-bottom:24px;opacity:0;animation:fadeUp .6s ease forwards .3s}
+.page-title span{color:var(--orange)}
+.page-sub{font-family:'Lora',serif;font-size:clamp(16px,2vw,20px);font-style:italic;color:var(--muted);max-width:520px;line-height:1.7;opacity:0;animation:fadeUp .6s ease forwards .45s}
+section{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:80px 48px}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:start}
+.content-block h2{font-family:'DM Mono',monospace;font-size:clamp(22px,3vw,32px);font-weight:500;letter-spacing:-.03em;line-height:1.1;margin-bottom:24px}
+.content-block h2 span{color:var(--orange)}
+.content-block p{font-family:'Lora',serif;font-size:16px;color:var(--muted);line-height:1.8;margin-bottom:16px}
+.content-block p em{color:var(--text);font-style:normal}
+.timeline{display:flex;flex-direction:column;gap:2px}
+.tl-item{display:grid;grid-template-columns:80px 1fr;gap:20px;padding:16px 20px;background:var(--surface);border:1px solid var(--border);align-items:start}
+.tl-year{font-family:'DM Mono',monospace;font-size:11px;font-weight:500;color:var(--orange);letter-spacing:.1em;margin-top:2px}
+.tl-content .tl-title{font-family:'DM Mono',monospace;font-size:13px;font-weight:500;color:var(--text);margin-bottom:4px}
+.tl-content .tl-desc{font-family:'Lora',serif;font-size:13px;color:var(--muted);line-height:1.6}
+.gallery-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px}
+.gallery-item{position:relative;aspect-ratio:4/3;background:var(--surface);border:1px solid var(--border);overflow:hidden;cursor:pointer;transition:border-color .2s}
+.gallery-item:hover{border-color:rgba(255,92,0,.3)}
+.gallery-item.wide{grid-column:span 2}
+.gallery-item.tall{grid-row:span 2;aspect-ratio:unset}
+.gallery-placeholder{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;min-height:200px}
+.gallery-placeholder .ph-icon{font-size:24px;opacity:.15}
+.gallery-placeholder span{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:.2em;text-transform:uppercase}
+.gallery-item img{width:100%;height:100%;object-fit:cover;display:block}
+.gallery-overlay{position:absolute;inset:0;background:rgba(8,8,8,.7);display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-end;padding:16px;opacity:0;transition:opacity .2s}
+.gallery-item:hover .gallery-overlay{opacity:1}
+.gallery-overlay span{font-family:'DM Mono',monospace;font-size:11px;color:var(--text);letter-spacing:.05em}
+.gallery-overlay small{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-top:4px}
+.tools-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2px}
+.tool-item{background:var(--surface);border:1px solid var(--border);padding:20px;text-align:center}
+.tool-name{font-family:'DM Mono',monospace;font-size:12px;font-weight:500;color:var(--text);margin-bottom:4px}
+.tool-role{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase}
+@media(max-width:768px){.page-hero{padding:120px 24px 60px}section{padding:60px 24px}.two-col{grid-template-columns:1fr;gap:40px}.gallery-grid{grid-template-columns:1fr 1fr}.gallery-item.wide{grid-column:span 2}.tools-grid{grid-template-columns:1fr 1fr}.timeline{gap:2px}}
+</style>
+</head>
+<body>
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <nav id="nav">
+    <a href="index.html" class="nav-logo"><span>dmd</span>builds.dev</a>
+    <ul class="nav-links">
+      <li class="dropdown">
+        <button class="dropdown-toggle">Projects <span class="dropdown-arrow">▾</span></button>
+        <div class="dropdown-menu">
+          <a href="jarvis.html">Jarvis <span>AI OS</span></a>
+          <a href="gesture.html">Gesture Control <span>Accessibility</span></a>
+          <a href="arduino.html">Arduino SaaS <span>Hardware</span></a>
+        </div>
+      </li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="devlog.html">Devlog</a></li>
+      <li><a href="index.html#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <div class="page-hero">
+    <p class="page-label">About</p>
+    <h1 class="page-title">Damodar<br><span>Kriplani</span></h1>
+    <p class="page-sub">9th grader from Pleasanton, CA. I build systems that actually do things. Founder mindset, builder hands.</p>
+  </div>
+
+  <div class="divider"></div>
+
+  <section>
+    <div class="section-label">The story</div>
+    <div class="two-col">
+      <div class="content-block reveal">
+        <h2>Who I <span>am</span></h2>
+        <p>I started with FIRST Lego League and never stopped building. FTC software lead and main driver on Team 23304, now competing on FRC Team 7419 where I led impact video production for two regionals.</p>
+        <p>I build real infrastructure. Jarvis runs on <em>GCP, Cloud Run, and PostgreSQL</em>. Gesture control runs live on my MacBook using MediaPipe. These aren't school projects, they're products.</p>
+        <p>I also care deeply about <em>Hinduism and Sanskrit</em>, am part of TKS, and I'm documenting everything publicly at dmdbuilds.dev. The chaos is the content.</p>
+      </div>
+      <div class="content-block reveal reveal-delay-1">
+        <h2>The <span>timeline</span></h2>
+        <div class="timeline">
+          <div class="tl-item"><span class="tl-year">2021</span><div class="tl-content"><div class="tl-title">FLL — FIRST Lego League</div><div class="tl-desc">First taste of robotics and competition builds</div></div></div>
+          <div class="tl-item"><span class="tl-year">2024</span><div class="tl-content"><div class="tl-title">FTC Team 23304 — Cyber Knights</div><div class="tl-desc">Software lead and main driver. Built and drove the robot in competition.</div></div></div>
+          <div class="tl-item"><span class="tl-year">2025</span><div class="tl-content"><div class="tl-title">FRC Team 7419</div><div class="tl-desc">Led impact video for Aerospace Valley and Half Moon Bay regionals. Competed at DCMP in Daly City.</div></div></div>
+          <div class="tl-item"><span class="tl-year">2025</span><div class="tl-content"><div class="tl-title">Started Jarvis</div><div class="tl-desc">Personal AI OS on hybrid cloud infrastructure. Still building.</div></div></div>
+          <div class="tl-item"><span class="tl-year">2026</span><div class="tl-content"><div class="tl-title">Gesture Control + dmdbuilds.dev</div><div class="tl-desc">Shipped gesture system, launched the brand, started building in public.</div></div></div>
+          <div class="tl-item"><span class="tl-year">2026</span><div class="tl-content"><div class="tl-title">TKS — Accepted</div><div class="tl-desc">The Knowledge Society. Summer program for builders.</div></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <section>
+    <div class="section-label">Gallery</div>
+    <div class="gallery-grid reveal">
+      <div class="gallery-item wide">
+        <div class="gallery-placeholder"><span class="ph-icon">⬛</span><span>FRC Team 7419 — DCMP Daly City</span></div>
+        <div class="gallery-overlay"><span>FRC DCMP — Daly City</span><small>Robotics · Apr 2026</small></div>
+      </div>
+      <div class="gallery-item">
+        <div class="gallery-placeholder"><span class="ph-icon">⬛</span><span>Gesture control demo</span></div>
+        <div class="gallery-overlay"><span>Gesture Control Demo</span><small>Project · 2026</small></div>
+      </div>
+      <div class="gallery-item">
+        <div class="gallery-placeholder"><span class="ph-icon">⬛</span><span>Impact video production</span></div>
+        <div class="gallery-overlay"><span>Impact Video — HMB Regional</span><small>FRC · 2026</small></div>
+      </div>
+      <div class="gallery-item">
+        <div class="gallery-placeholder"><span class="ph-icon">⬛</span><span>Clear Safe build</span></div>
+        <div class="gallery-overlay"><span>Clear Safe — Arduino Build</span><small>Innovation Nexus · 2026</small></div>
+      </div>
+      <div class="gallery-item">
+        <div class="gallery-placeholder"><span class="ph-icon">⬛</span><span>TAP Initiative volunteer</span></div>
+        <div class="gallery-overlay"><span>TAP Initiative — Castro Valley</span><small>Volunteer · Oct 2024</small></div>
+      </div>
+      <div class="gallery-item">
+        <div class="gallery-placeholder"><span class="ph-icon">⬛</span><span>FTC Team 23304</span></div>
+        <div class="gallery-overlay"><span>FTC — Cyber Knights</span><small>Robotics · 2024</small></div>
+      </div>
+      <div class="gallery-item wide">
+        <div class="gallery-placeholder"><span class="ph-icon">⬛</span><span>Desk setup / build environment</span></div>
+        <div class="gallery-overlay"><span>The Build Station</span><small>Pleasanton, CA</small></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <section>
+    <div class="section-label">Tools</div>
+    <div class="tools-grid reveal">
+      <div class="tool-item"><div class="tool-name">Cursor</div><div class="tool-role">Primary IDE</div></div>
+      <div class="tool-item"><div class="tool-name">VS Code</div><div class="tool-role">Code editor</div></div>
+      <div class="tool-item"><div class="tool-name">Figma</div><div class="tool-role">Design</div></div>
+      <div class="tool-item"><div class="tool-name">Onshape</div><div class="tool-role">CAD</div></div>
+      <div class="tool-item"><div class="tool-name">BambuStudio</div><div class="tool-role">3D Printing</div></div>
+      <div class="tool-item"><div class="tool-name">GCP</div><div class="tool-role">Cloud infra</div></div>
+      <div class="tool-item"><div class="tool-name">n8n</div><div class="tool-role">Automation</div></div>
+      <div class="tool-item"><div class="tool-name">Discord</div><div class="tool-role">Comms</div></div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <section>
+    <div class="section-label">This summer</div>
+    <div class="two-col">
+      <div class="content-block reveal">
+        <h2>What's <span>next</span></h2>
+        <p>TKS program, Quarry Lane summer school (Chemistry), 4 hackathons (Blue Space, Milpitas Hacks, CSI Hacks, Cove Hacks), and shipping real products.</p>
+        <p>Jarvis to <em>sellable MVP</em>. Web design business for Pleasanton local businesses. Gesture control research paper. YouTube automation channel. Documenting everything.</p>
+      </div>
+      <div class="content-block reveal reveal-delay-1">
+        <h2>Get in <span>touch</span></h2>
+        <p>Open to web design clients, research collabs, hackathon teammates, and anyone building interesting things.</p>
+        <p>Email: <em>hi@dmdbuilds.dev</em></p>
+        <br>
+        <a href="index.html#contact" class="btn-primary">Contact me</a>
+      </div>
+    </div>
+  </section>
+
+  <footer><p>© 2026 <span>dmdbuilds.dev</span> — Damodar Kriplani</p><p>Pleasanton, CA · Building in public</p></footer>
+  <script></script>
+</body>
+</html>
